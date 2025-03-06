@@ -63,7 +63,7 @@ const Header = () => {
             <Link href="/apps" className='flex w-8 h-8 items-center justify-center gap-2 shrink-0'>
               <LogoSite className='object-contain' />
             </Link>
-            <div className='font-light text-divider-deep'>/</div>
+            <div className='font-light hidden text-divider-deep'>/</div>
             <div className='flex items-center gap-0.5'>
               <WorkspaceProvider>
                 <WorkplaceSelector />

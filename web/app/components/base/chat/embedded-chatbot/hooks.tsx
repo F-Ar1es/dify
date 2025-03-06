@@ -88,6 +88,7 @@ export const useEmbeddedChatbot = () => {
       })
     }
   }, [appId, conversationIdInfo, setConversationIdInfo])
+  const [showConfigPanelBeforeChat, setShowConfigPanelBeforeChat] = useState(true)
 
   const [newConversationId, setNewConversationId] = useState('')
   const chatShouldReloadKey = useMemo(() => {
@@ -272,18 +273,23 @@ export const useEmbeddedChatbot = () => {
 
     return true
   }, [inputsForms, notify, t])
-  const handleStartChat = useCallback((callback?: any) => {
+  const handleStartChat = useCallback(() => {
     if (checkInputsRequired()) {
+      setShowConfigPanelBeforeChat(false)
       setShowNewConversationItemInList(true)
-      callback?.()
     }
-  }, [setShowNewConversationItemInList, checkInputsRequired])
+  }, [setShowConfigPanelBeforeChat, setShowNewConversationItemInList, checkInputsRequired])
   const currentChatInstanceRef = useRef<{ handleStop: () => void }>({ handleStop: () => { } })
   const handleChangeConversation = useCallback((conversationId: string) => {
     currentChatInstanceRef.current.handleStop()
     setNewConversationId('')
     handleConversationIdInfoChange(conversationId)
-  }, [handleConversationIdInfoChange])
+
+    if (conversationId === '' && !checkInputsRequired(true))
+      setShowConfigPanelBeforeChat(true)
+    else
+      setShowConfigPanelBeforeChat(false)
+  }, [handleConversationIdInfoChange, setShowConfigPanelBeforeChat, checkInputsRequired])
   const handleNewConversation = useCallback(() => {
     currentChatInstanceRef.current.handleStop()
     setNewConversationId('')
@@ -293,10 +299,11 @@ export const useEmbeddedChatbot = () => {
     }
     else if (currentConversationId) {
       handleConversationIdInfoChange('')
+      setShowConfigPanelBeforeChat(true)
       setShowNewConversationItemInList(true)
       handleNewConversationInputsChange({})
     }
-  }, [handleChangeConversation, currentConversationId, handleConversationIdInfoChange, setShowNewConversationItemInList, showNewConversationItemInList, handleNewConversationInputsChange])
+  }, [handleChangeConversation, currentConversationId, handleConversationIdInfoChange, setShowConfigPanelBeforeChat, setShowNewConversationItemInList, showNewConversationItemInList, handleNewConversationInputsChange])
 
   const handleNewConversationCompleted = useCallback((newConversationId: string) => {
     setNewConversationId(newConversationId)
@@ -329,6 +336,8 @@ export const useEmbeddedChatbot = () => {
     appPrevChatList,
     pinnedConversationList,
     conversationList,
+    showConfigPanelBeforeChat,
+    setShowConfigPanelBeforeChat,
     setShowNewConversationItemInList,
     newConversationInputs,
     newConversationInputsRef,

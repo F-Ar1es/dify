@@ -15,7 +15,7 @@ import type {
   ConversationItem,
 } from '@/models/share'
 
-export type EmbeddedChatbotContextValue = {
+export interface EmbeddedChatbotContextValue {
   appInfoError?: any
   appInfoLoading?: boolean
   appMeta?: AppMeta
@@ -27,12 +27,13 @@ export type EmbeddedChatbotContextValue = {
   appPrevChatList: ChatItem[]
   pinnedConversationList: AppConversationData['data']
   conversationList: AppConversationData['data']
+  showConfigPanelBeforeChat: boolean
   newConversationInputs: Record<string, any>
   newConversationInputsRef: RefObject<Record<string, any>>
   handleNewConversationInputsChange: (v: Record<string, any>) => void
   inputsForms: any[]
   handleNewConversation: () => void
-  handleStartChat: (callback?: any) => void
+  handleStartChat: () => void
   handleChangeConversation: (conversationId: string) => void
   handleNewConversationCompleted: (newConversationId: string) => void
   chatShouldReloadKey: string
@@ -49,6 +50,7 @@ export const EmbeddedChatbotContext = createContext<EmbeddedChatbotContextValue>
   appPrevChatList: [],
   pinnedConversationList: [],
   conversationList: [],
+  showConfigPanelBeforeChat: false,
   newConversationInputs: {},
   newConversationInputsRef: { current: {} },
   handleNewConversationInputsChange: () => {},

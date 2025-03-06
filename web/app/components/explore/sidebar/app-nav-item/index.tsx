@@ -3,6 +3,7 @@ import React, { useRef } from 'react'
 
 import { useRouter } from 'next/navigation'
 import { useHover } from 'ahooks'
+import s from './style.module.css'
 import cn from '@/utils/classnames'
 import ItemOperation from '@/app/components/explore/item-operation'
 import AppIcon from '@/app/components/base/app-icon'
@@ -45,8 +46,10 @@ export default function AppNavItem({
     <div
       ref={ref}
       key={id}
-      className={cn('text-components-menu-item-text system-sm-medium flex h-8 items-center justify-between mobile:justify-center px-2 mobile:px-1 rounded-lg text-sm font-normal',
-        isSelected ? 'bg-state-base-active text-components-menu-item-text-active' : 'hover:bg-state-base-hover hover:text-components-menu-item-text-hover',
+      className={cn(
+        s.item,
+        isSelected ? s.active : 'hover:bg-gray-200',
+        'flex h-8 items-center justify-between mobile:justify-center px-2 mobile:px-1 rounded-lg text-sm font-normal',
       )}
       onClick={() => {
         router.push(url) // use Link causes popup item always trigger jump. Can not be solved by e.stopPropagation().

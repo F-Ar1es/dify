@@ -21,7 +21,7 @@ export const createFileStore = (
   onChange?: (files: FileEntity[]) => void,
 ) => {
   return create<Shape>(set => ({
-    files: value ? [...value] : [],
+    files: [...value],
     setFiles: (files) => {
       set({ files })
       onChange?.(files)

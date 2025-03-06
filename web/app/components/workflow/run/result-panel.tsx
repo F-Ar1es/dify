@@ -13,7 +13,6 @@ import type {
 import { BlockEnum } from '@/app/components/workflow/types'
 import { hasRetryNode } from '@/app/components/workflow/utils'
 import { IterationLogTrigger } from '@/app/components/workflow/run/iteration-log'
-import { LoopLogTrigger } from '@/app/components/workflow/run/loop-log'
 import { RetryLogTrigger } from '@/app/components/workflow/run/retry-log'
 import { AgentLogTrigger } from '@/app/components/workflow/run/agent-log'
 
@@ -34,7 +33,6 @@ type ResultPanelProps = {
   exceptionCounts?: number
   execution_metadata?: any
   handleShowIterationResultList?: (detail: NodeTracing[][], iterDurationMap: any) => void
-  handleShowLoopResultList?: (detail: NodeTracing[][], loopDurationMap: any) => void
   onShowRetryDetail?: (detail: NodeTracing[]) => void
   handleShowAgentOrToolLog?: (detail?: AgentLogItemWithChildren) => void
 }
@@ -55,13 +53,11 @@ const ResultPanel: FC<ResultPanelProps> = ({
   exceptionCounts,
   execution_metadata,
   handleShowIterationResultList,
-  handleShowLoopResultList,
   onShowRetryDetail,
   handleShowAgentOrToolLog,
 }) => {
   const { t } = useTranslation()
   const isIterationNode = nodeInfo?.node_type === BlockEnum.Iteration && !!nodeInfo?.details?.length
-  const isLoopNode = nodeInfo?.node_type === BlockEnum.Loop && !!nodeInfo?.details?.length
   const isRetryNode = hasRetryNode(nodeInfo?.node_type) && !!nodeInfo?.retryDetail?.length
   const isAgentNode = nodeInfo?.node_type === BlockEnum.Agent && !!nodeInfo?.agentLog?.length
   const isToolNode = nodeInfo?.node_type === BlockEnum.Tool && !!nodeInfo?.agentLog?.length
@@ -83,14 +79,6 @@ const ResultPanel: FC<ResultPanelProps> = ({
             <IterationLogTrigger
               nodeInfo={nodeInfo}
               onShowIterationResultList={handleShowIterationResultList}
-            />
-          )
-        }
-        {
-          isLoopNode && handleShowLoopResultList && (
-            <LoopLogTrigger
-              nodeInfo={nodeInfo}
-              onShowLoopResultList={handleShowLoopResultList}
             />
           )
         }

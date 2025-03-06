@@ -130,7 +130,7 @@ export default function AppSelector({ isMobile }: IAppSelector) {
                     </Menu.Item>}
                     <Menu.Item>
                       {({ active }) => <Link
-                        className={classNames(itemClassName, 'group justify-between',
+                        className={classNames(itemClassName, 'hidden', 'group justify-between',
                           active && 'bg-state-base-hover',
                         )}
                         href='https://github.com/langgenius/dify/discussions/categories/feedbacks'
@@ -141,7 +141,7 @@ export default function AppSelector({ isMobile }: IAppSelector) {
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => <Link
-                        className={classNames(itemClassName, 'group justify-between',
+                        className={classNames(itemClassName, 'hidden', 'group justify-between',
                           active && 'bg-state-base-hover',
                         )}
                         href='https://discord.gg/5AEfbxcd9k'
@@ -152,7 +152,7 @@ export default function AppSelector({ isMobile }: IAppSelector) {
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => <Link
-                        className={classNames(itemClassName, 'group justify-between',
+                        className={classNames(itemClassName, 'hidden', 'group justify-between',
                           active && 'bg-state-base-hover',
                         )}
                         href={
@@ -165,7 +165,7 @@ export default function AppSelector({ isMobile }: IAppSelector) {
                     </Menu.Item>
                     <Menu.Item>
                       {({ active }) => <Link
-                        className={classNames(itemClassName, 'group justify-between',
+                        className={classNames(itemClassName, 'hidden', 'group justify-between',
                           active && 'bg-state-base-hover',
                         )}
                         href='https://roadmap.dify.ai'
@@ -177,7 +177,7 @@ export default function AppSelector({ isMobile }: IAppSelector) {
                     {
                       document?.body?.getAttribute('data-public-site-about') !== 'hide' && (
                         <Menu.Item>
-                          {({ active }) => <div className={classNames(itemClassName, 'justify-between',
+                          {({ active }) => <div className={classNames(itemClassName, 'hidden', 'justify-between',
                             active && 'bg-state-base-hover',
                           )} onClick={() => setAboutVisible(true)}>
                             <div>{t('common.userProfile.about')}</div>

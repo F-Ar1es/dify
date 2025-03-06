@@ -17,6 +17,7 @@ import { fetchAppDetail, fetchAppList } from '@/service/explore'
 import { importDSL } from '@/service/apps'
 import { useTabSearchParams } from '@/hooks/use-tab-searchparams'
 import CreateAppModal from '@/app/components/explore/create-app-modal'
+import AppTypeSelector from '@/app/components/app/type-selector'
 import type { CreateAppModalProps } from '@/app/components/explore/create-app-modal'
 import Loading from '@/app/components/base/loading'
 import { NEED_REFRESH_APP_LIST_KEY } from '@/config'
@@ -27,6 +28,7 @@ import { DSLImportMode } from '@/models/app'
 import { usePluginDependencies } from '@/app/components/workflow/plugin-dependency/hooks'
 
 type AppsProps = {
+  pageType?: PageType
   onSuccess?: () => void
 }
 
@@ -36,6 +38,7 @@ export enum PageType {
 }
 
 const Apps = ({
+  pageType = PageType.EXPLORE,
   onSuccess,
 }: AppsProps) => {
   const { t } = useTranslation()
@@ -59,7 +62,7 @@ const Apps = ({
   const [currentType, setCurrentType] = useState<string>('')
   const [currCategory, setCurrCategory] = useTabSearchParams({
     defaultTab: allCategoriesEn,
-    disableSearchParams: false,
+    disableSearchParams: pageType !== PageType.EXPLORE,
   })
 
   const {
@@ -123,7 +126,7 @@ const Apps = ({
     icon_background,
     description,
   }) => {
-    const { export_data, mode } = await fetchAppDetail(
+    const { export_data } = await fetchAppDetail(
       currApp?.app.id as string,
     )
     try {
@@ -146,7 +149,7 @@ const Apps = ({
       if (app.app_id)
         await handleCheckPluginDependencies(app.app_id)
       localStorage.setItem(NEED_REFRESH_APP_LIST_KEY, '1')
-      getRedirection(isCurrentWorkspaceEditor, { id: app.app_id, mode }, push)
+      getRedirection(isCurrentWorkspaceEditor, { id: app.app_id }, push)
     }
     catch (e) {
       Toast.notify({ type: 'error', message: t('app.newApp.appCreateFailed') })
@@ -163,18 +166,26 @@ const Apps = ({
 
   return (
     <div className={cn(
-      'flex flex-col h-full border-l-[0.5px] border-divider-regular',
+      'flex flex-col',
+      pageType === PageType.EXPLORE ? 'h-full border-l border-gray-200' : 'h-[calc(100%-56px)]',
     )}>
-
-      <div className='shrink-0 pt-6 px-12'>
-        <div className={`mb-1 ${s.textGradient} text-xl font-semibold`}>{t('explore.apps.title')}</div>
-        <div className='text-text-tertiary text-sm'>{t('explore.apps.description')}</div>
-      </div>
-
+      {pageType === PageType.EXPLORE && (
+        <div className='shrink-0 pt-6 px-12'>
+          <div className={`mb-1 ${s.textGradient} text-xl font-semibold`}>{t('explore.apps.title')}</div>
+          <div className='text-gray-500 text-sm'>{t('explore.apps.description')}</div>
+        </div>
+      )}
       <div className={cn(
-        'flex items-center justify-between mt-6 px-12',
+        'flex items-center justify-between mt-6',
+        pageType === PageType.EXPLORE ? 'px-12' : 'px-8',
       )}>
         <>
+          {pageType !== PageType.EXPLORE && (
+            <>
+              <AppTypeSelector value={currentType} onChange={setCurrentType}/>
+              <div className='mx-2 w-[1px] h-3.5 bg-gray-200'/>
+            </>
+          )}
           <Category
             list={categories}
             value={currCategory}
@@ -194,17 +205,19 @@ const Apps = ({
       </div>
 
       <div className={cn(
-        'relative flex flex-1 pb-6 flex-col overflow-auto shrink-0 grow mt-4',
+        'relative flex flex-1 pb-6 flex-col overflow-auto bg-gray-100 shrink-0 grow',
+        pageType === PageType.EXPLORE ? 'mt-4' : 'mt-0 pt-2',
       )}>
         <nav
           className={cn(
             s.appList,
-            'grid content-start shrink-0 gap-4 px-6 sm:px-12',
+            'grid content-start shrink-0',
+            pageType === PageType.EXPLORE ? 'gap-4 px-6 sm:px-12' : 'gap-3 px-8  sm:!grid-cols-2 md:!grid-cols-3 lg:!grid-cols-4',
           )}>
           {searchFilteredList.map(app => (
             <AppCard
               key={app.app_id}
-              isExplore
+              isExplore={pageType === PageType.EXPLORE}
               app={app}
               canCreate={hasEditPermission}
               onCreate={() => {

@@ -40,9 +40,9 @@ const WorkplaceSelector = () => {
                 group hover:bg-state-base-hover cursor-pointer ${open && 'bg-state-base-hover'} rounded-[10px]
               `,
             )}>
-              <div className='flex items-center justify-center w-7 h-7 bg-[#EFF4FF] rounded-lg text-xs font-medium text-primary-600'>{currentWorkspace?.name[0].toLocaleUpperCase()}</div>
-              <div className='flex flex-row'>
-                <div className={'truncate max-w-[80px] text-text-secondary system-sm-medium'}>{currentWorkspace?.name}</div>
+              <div className='hidden flex items-center justify-center w-7 h-7 bg-[#EFF4FF] rounded-lg text-xs font-medium text-primary-600'>{currentWorkspace?.name[0].toLocaleUpperCase()}</div>
+              <div className='hidden flex flex-row'>
+                <div className={'truncate max-w-[80px] text-text-secondary system-sm-medium'}>{currentWorkspace?.name}test</div>
                 <RiArrowDownSLine className='w-4 h-4 text-text-secondary' />
               </div>
             </Menu.Button>

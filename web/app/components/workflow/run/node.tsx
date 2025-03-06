@@ -13,7 +13,6 @@ import BlockIcon from '../block-icon'
 import { BlockEnum } from '../types'
 import { RetryLogTrigger } from './retry-log'
 import { IterationLogTrigger } from './iteration-log'
-import { LoopLogTrigger } from './loop-log'
 import { AgentLogTrigger } from './agent-log'
 import cn from '@/utils/classnames'
 import StatusContainer from '@/app/components/workflow/run/status-container'
@@ -22,7 +21,6 @@ import { CodeLanguage } from '@/app/components/workflow/nodes/code/types'
 import type {
   AgentLogItemWithChildren,
   IterationDurationMap,
-  LoopDurationMap,
   NodeTracing,
 } from '@/types/workflow'
 import ErrorHandleTip from '@/app/components/workflow/nodes/_base/components/error-handle/error-handle-tip'
@@ -35,11 +33,9 @@ type Props = {
   hideInfo?: boolean
   hideProcessDetail?: boolean
   onShowIterationDetail?: (detail: NodeTracing[][], iterDurationMap: IterationDurationMap) => void
-  onShowLoopDetail?: (detail: NodeTracing[][], loopDurationMap: LoopDurationMap) => void
   onShowRetryDetail?: (detail: NodeTracing[]) => void
   onShowAgentOrToolLog?: (detail?: AgentLogItemWithChildren) => void
   notShowIterationNav?: boolean
-  notShowLoopNav?: boolean
 }
 
 const NodePanel: FC<Props> = ({
@@ -49,11 +45,9 @@ const NodePanel: FC<Props> = ({
   hideInfo = false,
   hideProcessDetail,
   onShowIterationDetail,
-  onShowLoopDetail,
   onShowRetryDetail,
   onShowAgentOrToolLog,
   notShowIterationNav,
-  notShowLoopNav,
 }) => {
   const [collapseState, doSetCollapseState] = useState<boolean>(true)
   const setCollapseState = useCallback((state: boolean) => {
@@ -85,7 +79,6 @@ const NodePanel: FC<Props> = ({
   }, [nodeInfo.expand, setCollapseState])
 
   const isIterationNode = nodeInfo.node_type === BlockEnum.Iteration && !!nodeInfo.details?.length
-  const isLoopNode = nodeInfo.node_type === BlockEnum.Loop && !!nodeInfo.details?.length
   const isRetryNode = hasRetryNode(nodeInfo.node_type) && !!nodeInfo.retryDetail?.length
   const isAgentNode = nodeInfo.node_type === BlockEnum.Agent && !!nodeInfo.agentLog?.length
   const isToolNode = nodeInfo.node_type === BlockEnum.Tool && !!nodeInfo.agentLog?.length
@@ -96,7 +89,7 @@ const NodePanel: FC<Props> = ({
         <div
           className={cn(
             'flex items-center pl-1 pr-3 cursor-pointer',
-            hideInfo ? 'py-2 pl-2' : 'py-1.5',
+            hideInfo ? 'py-2' : 'py-1.5',
             !collapseState && (hideInfo ? '!pb-1' : '!pb-1.5'),
           )}
           onClick={() => setCollapseState(!collapseState)}
@@ -143,13 +136,6 @@ const NodePanel: FC<Props> = ({
               <IterationLogTrigger
                 nodeInfo={nodeInfo}
                 onShowIterationResultList={onShowIterationDetail}
-              />
-            )}
-            {/* The nav to the Loop detail */}
-            {isLoopNode && !notShowLoopNav && onShowLoopDetail && (
-              <LoopLogTrigger
-                nodeInfo={nodeInfo}
-                onShowLoopResultList={onShowLoopDetail}
               />
             )}
             {isRetryNode && onShowRetryDetail && (

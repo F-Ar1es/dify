@@ -2,7 +2,6 @@ import React, { type FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   RiCloseLine,
-  RiCollapseDiagonalLine,
   RiExpandDiagonalLine,
 } from '@remixicon/react'
 import ActionButtons from './common/action-buttons'
@@ -100,7 +99,7 @@ const ChildSegmentDetail: FC<IChildSegmentDetailProps> = ({
             </>
           )}
           <div className='w-8 h-8 flex justify-center items-center p-1.5 cursor-pointer mr-1' onClick={toggleFullScreen}>
-            {fullScreen ? <RiCollapseDiagonalLine className='w-4 h-4 text-text-tertiary' /> : <RiExpandDiagonalLine className='w-4 h-4 text-text-tertiary' />}
+            <RiExpandDiagonalLine className='w-4 h-4 text-text-tertiary' />
           </div>
           <div className='w-8 h-8 flex justify-center items-center p-1.5 cursor-pointer' onClick={onCancel}>
             <RiCloseLine className='w-4 h-4 text-text-tertiary' />

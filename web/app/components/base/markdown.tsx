@@ -7,14 +7,11 @@ import RehypeKatex from 'rehype-katex'
 import RemarkGfm from 'remark-gfm'
 import RehypeRaw from 'rehype-raw'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import {
-  atelierHeathDark,
-  atelierHeathLight,
-} from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { atelierHeathLight } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import { Component, memo, useMemo, useRef, useState } from 'react'
 import { flow } from 'lodash-es'
-import ActionButton from '@/app/components/base/action-button'
-import CopyIcon from '@/app/components/base/copy-icon'
+import cn from '@/utils/classnames'
+import CopyBtn from '@/app/components/base/copy-btn'
 import SVGBtn from '@/app/components/base/svg'
 import Flowchart from '@/app/components/base/mermaid'
 import ImageGallery from '@/app/components/base/image-gallery'
@@ -25,9 +22,6 @@ import SVGRenderer from '@/app/components/base/svg-gallery'
 import MarkdownButton from '@/app/components/base/markdown-blocks/button'
 import MarkdownForm from '@/app/components/base/markdown-blocks/form'
 import ThinkBlock from '@/app/components/base/markdown-blocks/think-block'
-import { Theme } from '@/types/app'
-import useTheme from '@/hooks/use-theme'
-import cn from '@/utils/classnames'
 
 // Available language https://github.com/react-syntax-highlighter/react-syntax-highlighter/blob/master/AVAILABLE_LANGUAGES_HLJS.MD
 const capitalizationLanguageNameMap: Record<string, string> = {
@@ -106,8 +100,7 @@ export function PreCode(props: { children: any }) {
 // visit https://reactjs.org/docs/error-decoder.html?invariant=185 for the full message
 // or use the non-minified dev environment for full errors and additional helpful warnings.
 
-const CodeBlock: any = memo(({ inline, className, children, ...props }: any) => {
-  const { theme } = useTheme()
+const CodeBlock: any = memo(({ inline, className, children, ...props }) => {
   const [isSVG, setIsSVG] = useState(true)
   const match = /language-(\w+)/.exec(className || '')
   const language = match?.[1]
@@ -147,12 +140,10 @@ const CodeBlock: any = memo(({ inline, className, children, ...props }: any) => 
       return (
         <SyntaxHighlighter
           {...props}
-          style={theme === Theme.light ? atelierHeathLight : atelierHeathDark}
+          style={atelierHeathLight}
           customStyle={{
             paddingLeft: 12,
-            borderBottomLeftRadius: '10px',
-            borderBottomRightRadius: '10px',
-            backgroundColor: 'var(--color-components-input-bg-normal)',
+            backgroundColor: '#fff',
           }}
           language={match?.[1]}
           showLineNumbers
@@ -168,14 +159,21 @@ const CodeBlock: any = memo(({ inline, className, children, ...props }: any) => 
     return <code {...props} className={className}>{children}</code>
 
   return (
-    <div className='relative'>
-      <div className='bg-components-input-bg-normal rounded-t-[10px] flex justify-between h-8 items-center p-1 pl-3 border-b border-divider-subtle'>
-        <div className='system-xs-semibold-uppercase text-text-secondary'>{languageShowName}</div>
-        <div className='flex items-center gap-1'>
+    <div>
+      <div
+        className='flex justify-between h-8 items-center p-1 pl-3 border-b'
+        style={{
+          borderColor: 'rgba(0, 0, 0, 0.05)',
+        }}
+      >
+        <div className='text-[13px] text-gray-500 font-normal'>{languageShowName}</div>
+        <div style={{ display: 'flex' }}>
           {(['mermaid', 'svg']).includes(language!) && <SVGBtn isSVG={isSVG} setIsSVG={setIsSVG} />}
-          <ActionButton>
-            <CopyIcon content={String(children).replace(/\n$/, '')}/>
-          </ActionButton>
+          <CopyBtn
+            className='mr-1'
+            value={String(children).replace(/\n$/, '')}
+            isPlain
+          />
         </div>
       </div>
       {renderCodeContent}
@@ -184,16 +182,16 @@ const CodeBlock: any = memo(({ inline, className, children, ...props }: any) => 
 })
 CodeBlock.displayName = 'CodeBlock'
 
-const VideoBlock: any = memo(({ node }: any) => {
-  const srcs = node.children.filter((child: any) => 'properties' in child).map((child: any) => (child as any).properties.src)
+const VideoBlock: any = memo(({ node }) => {
+  const srcs = node.children.filter(child => 'properties' in child).map(child => (child as any).properties.src)
   if (srcs.length === 0)
     return null
   return <VideoGallery key={srcs.join()} srcs={srcs} />
 })
 VideoBlock.displayName = 'VideoBlock'
 
-const AudioBlock: any = memo(({ node }: any) => {
-  const srcs = node.children.filter((child: any) => 'properties' in child).map((child: any) => (child as any).properties.src)
+const AudioBlock: any = memo(({ node }) => {
+  const srcs = node.children.filter(child => 'properties' in child).map(child => (child as any).properties.src)
   if (srcs.length === 0)
     return null
   return <AudioGallery key={srcs.join()} srcs={srcs} />
@@ -213,9 +211,7 @@ const Paragraph = (paragraph: any) => {
     return (
       <>
         <ImageGallery srcs={[children_node[0].properties.src]} />
-        {
-          Array.isArray(paragraph.children) ? <p>{paragraph.children.slice(1)}</p> : null
-        }
+        <p>{paragraph.children.slice(1)}</p>
       </>
     )
   }
@@ -245,7 +241,7 @@ export function Markdown(props: { content: string; className?: string }) {
     preprocessLaTeX,
   ])(props.content)
   return (
-    <div className={cn('markdown-body', '!text-text-primary', props.className)}>
+    <div className={cn(props.className, 'markdown-body')}>
       <ReactMarkdown
         remarkPlugins={[
           RemarkGfm,
@@ -284,7 +280,7 @@ export function Markdown(props: { content: string; className?: string }) {
           p: Paragraph,
           button: MarkdownButton,
           form: MarkdownForm,
-          script: ScriptBlock as any,
+          script: ScriptBlock,
           details: ThinkBlock,
         }}
       >

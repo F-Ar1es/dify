@@ -7,7 +7,6 @@ import { useBoolean } from 'ahooks'
 import type {
   AgentLogItemWithChildren,
   IterationDurationMap,
-  LoopDurationMap,
   NodeTracing,
 } from '@/types/workflow'
 
@@ -33,18 +32,6 @@ export const useLogs = () => {
     setIterationResultList(detail)
     setIterationResultDurationMap(iterDurationMap)
   }, [setShowIteratingDetailTrue, setIterationResultList, setIterationResultDurationMap])
-
-  const [showLoopingDetail, {
-    setTrue: setShowLoopingDetailTrue,
-    setFalse: setShowLoopingDetailFalse,
-  }] = useBoolean(false)
-  const [loopResultList, setLoopResultList] = useState<NodeTracing[][]>([])
-  const [loopResultDurationMap, setLoopResultDurationMap] = useState<LoopDurationMap>({})
-  const handleShowLoopResultList = useCallback((detail: NodeTracing[][], loopDurationMap: LoopDurationMap) => {
-    setShowLoopingDetailTrue()
-    setLoopResultList(detail)
-    setLoopResultDurationMap(loopDurationMap)
-  }, [setShowLoopingDetailTrue, setLoopResultList, setLoopResultDurationMap])
 
   const [agentOrToolLogItemStack, setAgentOrToolLogItemStack] = useState<AgentLogItemWithChildren[]>([])
   const agentOrToolLogItemStackRef = useRef(agentOrToolLogItemStack)
@@ -77,7 +64,7 @@ export const useLogs = () => {
   }, [setAgentOrToolLogItemStack, setAgentOrToolLogListMap])
 
   return {
-    showSpecialResultPanel: showRetryDetail || showIteratingDetail || showLoopingDetail || !!agentOrToolLogItemStack.length,
+    showSpecialResultPanel: showRetryDetail || showIteratingDetail || !!agentOrToolLogItemStack.length,
     showRetryDetail,
     setShowRetryDetailTrue,
     setShowRetryDetailFalse,
@@ -93,15 +80,6 @@ export const useLogs = () => {
     iterationResultDurationMap,
     setIterationResultDurationMap,
     handleShowIterationResultList,
-
-    showLoopingDetail,
-    setShowLoopingDetailTrue,
-    setShowLoopingDetailFalse,
-    loopResultList,
-    setLoopResultList,
-    loopResultDurationMap,
-    setLoopResultDurationMap,
-    handleShowLoopResultList,
 
     agentOrToolLogItemStack,
     agentOrToolLogListMap,

@@ -516,6 +516,9 @@ const Debug: FC<IDebug> = ({
                         messageId={messageId}
                         isError={false}
                         onRetry={() => { }}
+                        supportAnnotation
+                        appId={appId}
+                        varList={varList}
                         siteInfo={null}
                       />
                     </div>

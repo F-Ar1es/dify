@@ -23,12 +23,12 @@ const Header = () => {
         <p className='text-text-primary title-3xl-semi-bold'>{t('common.account.account')}</p>
       </div>
       <div className='flex items-center flex-shrink-0 gap-3'>
-        <Button className='gap-2 py-2 px-3 system-sm-medium' onClick={back}>
+        <Button className='gap-2 hidden py-2 px-3 system-sm-medium' onClick={back}>
           <RiRobot2Line className='w-4 h-4' />
           <p>{t('common.account.studio')}</p>
           <RiArrowRightUpLine className='w-4 h-4' />
         </Button>
-        <div className='w-[1px] h-4 bg-divider-regular' />
+        <div className='w-[1px] hidden h-4 bg-divider-regular' />
         <Avatar />
       </div>
     </div>

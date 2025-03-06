@@ -215,7 +215,7 @@ function CreateApp({ onClose, onSuccess, onCreateFromTemplate }: CreateAppProps)
             </div>
           </div>
           <div className='pt-5 pb-10 flex justify-between items-center'>
-            <div className='flex gap-1 items-center system-xs-regular text-text-tertiary cursor-pointer' onClick={onCreateFromTemplate}>
+            <div className='flex hidden gap-1 items-center system-xs-regular text-text-tertiary cursor-pointer' onClick={onCreateFromTemplate}>
               <span>{t('app.newApp.noIdeaTip')}</span>
               <div className='p-[1px]'>
                 <RiArrowRightLine className='w-3.5 h-3.5' />

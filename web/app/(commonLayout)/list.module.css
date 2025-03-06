@@ -215,3 +215,7 @@
 .listItem:hover .unavailable {
   @apply opacity-100;
 }
+
+.hidden {
+  display: none;
+}
